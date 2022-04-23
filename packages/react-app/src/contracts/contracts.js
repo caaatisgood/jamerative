@@ -1,1 +1,1 @@
-module.exports = ["CodeNFTMinter", "GenartNFTMinter"];
+module.exports = ["CodeNFTMinter"];

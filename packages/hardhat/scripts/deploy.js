@@ -5,12 +5,14 @@ const { config, ethers, tenderly, run } = require("hardhat");
 const { utils } = require("ethers");
 const R = require("ramda");
 
+const TOKEN_NAME = "NFTExample"
+
 const main = async () => {
 
   console.log("\n\n 📡 Deploying...\n");
 
-  const codeNFTMinter = await deploy("CodeNFTMinter") // <-- add in constructor args like line 19 vvvv
-  // const genartNFTMinter = await deploy("GenartNFTMinter") // <-- add in constructor args like line 19 vvvv
+  const codeNFTMinter = await deploy("CodeNFTMinter", [TOKEN_NAME, "E2ENFT"]) // <-- add in constructor args like line 19 vvvv
+  // const genartNFTMinter = await deploy("GenartNFTMinter", ["NFTExample", "E2ENFT"]) // <-- add in constructor args like line 19 vvvv
 
   //const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
   //const secondContract = await deploy("SecondContract")

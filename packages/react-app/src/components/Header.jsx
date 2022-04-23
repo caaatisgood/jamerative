@@ -6,7 +6,7 @@ import React from "react";
 export default function Header() {
   return (
     <PageHeader
-      title="🎟 collab"
+      title="🍯 Jamerative"
       style={{ cursor: "pointer" }}
     />
   );

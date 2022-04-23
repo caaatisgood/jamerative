@@ -25,7 +25,7 @@ import {
 } from "./hooks";
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.rinkeby; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -111,7 +111,6 @@ function App(props) {
   // If you want to make 🔐 write transactions to your contracts, use the userProvider:
   const writeContracts = useContractLoader(userProvider);
 
-
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
@@ -150,6 +149,13 @@ function App(props) {
     readContracts,
     writeContracts,
   ]);
+
+  useEffect(() => {
+    const ASSET_CONTRACT_ADDRESS = '0xDA0Dab7cB2aaE6b28BF888f87904888262159c9d'
+    fetch(`https://testnets-api.opensea.io/api/v1/assets?offset=0&limit=20&asset_contract_address=${ASSET_CONTRACT_ADDRESS}`)
+      .then(res => res.json())
+      .then(console.log)
+  }, [])
 
   let networkDisplay = "";
   if (localChainId && selectedChainId && localChainId !== selectedChainId) {
@@ -276,13 +282,13 @@ function App(props) {
               address={address}
               blockExplorer={blockExplorer}
             />
-            <GenartMinter
+            {/* <GenartMinter
               name="GenartNFTMinter"
               signer={userProvider.getSigner()}
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
-            />
+            /> */}
           </Route>
 
           <Route path="/view">
@@ -306,7 +312,7 @@ function App(props) {
         </Switch>
       </BrowserRouter>
 
-      <ThemeSwitch />
+      {/* <ThemeSwitch /> */}
 
       {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
       <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>

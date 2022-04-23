@@ -37,6 +37,8 @@ function mnemonic() {
 }
 
 module.exports = {
+  solidity: "0.8.12",
+
   defaultNetwork,
 
   // don't forget to set your provider like:
@@ -94,29 +96,6 @@ module.exports = {
     //     mnemonic: mnemonic(),
     //   },
     // },
-  },
-  solidity: {
-    compilers: [
-      {
-        version: "0.7.6",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200
-          }
-        }
-      },
-      {
-        version: "0.6.7",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200
-          }
-        }
-      }
-    ],
-
   },
   etherscan: {
     // Your API key for Etherscan

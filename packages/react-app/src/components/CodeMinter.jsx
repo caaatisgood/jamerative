@@ -7,13 +7,18 @@ import Account from "./Account";
 import { Transactor } from "../helpers";
 import { NFT_STORAGE_KEY, DEFAULT_CONTRACT_NAME } from "../constants";
 
+const _DEBUG_DEFAULT_CODE = "window.__fancyFunc=()=>console.log('fancy func');";
+const _DEBUG_DEFAULT_CODE_NAME = "__fancyFunc";
+
 async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, image, name, code }) {
   const client = new NFTStorage({ token: NFT_STORAGE_KEY });
   setStatus("Uploading to nft.storage...");
   const metadata = await client.store({
     name,
+    description: "",
     image,
     properties: {
+      type: "CodeNFT",
       code,
     },
   });
@@ -24,7 +29,7 @@ async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, 
 
   // scaffold-eth's Transactor helper gives us a nice UI popup when a transaction is sent
   const transactor = Transactor(provider, gasPrice);
-  const tx = await transactor(contract.mintToken(ownerAddress, metadataURI));
+  const tx = await transactor(contract.mint(ownerAddress, metadataURI));
 
   setStatus("Blockchain transaction sent, waiting confirmation...");
 
@@ -64,8 +69,8 @@ export default function CodeMinter({
 
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
-  const [nftName, setName] = useState("");
-  const [code, setCode] = useState("");
+  const [nftName, setName] = useState(_DEBUG_DEFAULT_CODE_NAME);
+  const [code, setCode] = useState(_DEBUG_DEFAULT_CODE);
   const [minting, setMinting] = useState(false);
   const [status, setStatus] = useState("");
   const [tokenId, setTokenId] = useState(null);
@@ -104,19 +109,6 @@ export default function CodeMinter({
   );
 
   const preview = previewURL ? <img src={previewURL} style={{maxWidth: "800px"}}/> : <div/>
-
-  const nameField = (
-    <Input placeholder="Enter a name for your code" onChange={e => {
-      setName(e.target.value);
-    }}/>
-  );
-
-  const codeField = (
-    <Input.TextArea placeholder="Enter your code here" onChange={e => {
-      setCode(e.target.value);
-    }}/>
-  );
-
   const mintEnabled = file != null && !!nftName;
 
   const startMinting = () => {
@@ -139,18 +131,13 @@ export default function CodeMinter({
       })
     });
   }
-  
-  const mintButton = (
-    <Button type="primary" disabled={!mintEnabled} onClick={startMinting}>
-      {minting ? <LoadingOutlined/> : "Mint!"}
-    </Button>
-  )
-  
-  const minterForm = (
+
+  return (
     <div style={{ margin: "auto", width: "70vw" }}>
       <Card
         title={
           <div>
+            <h2 style={{ display: 'inline' }}>Code Minter</h2>
             <div style={{ float: "right" }}>
               <Account
                 address={address}
@@ -170,14 +157,17 @@ export default function CodeMinter({
       >
         { file == null && uploadView }
         {preview}
-        {nameField}
-        {codeField}
-        {mintButton}
+        <Input placeholder="Enter a name for your code" onChange={e => {
+          setName(e.target.value);
+        }} value={nftName} />
+        <Input.TextArea placeholder="Enter your code here" onChange={e => {
+          setCode(e.target.value);
+        }} value={code} />
+        <Button type="primary" disabled={!mintEnabled} onClick={startMinting}>
+          {minting ? <LoadingOutlined/> : "Mint!"}
+        </Button>
         {status}
       </Card>
     </div>
   );
-
-
-  return minterForm;
 }

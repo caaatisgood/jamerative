@@ -81,7 +81,7 @@ export default function Account({
     }
   }
 
-  const { currentTheme } = useThemeSwitcher();
+  // const { currentTheme } = useThemeSwitcher();
 
   const display = minimized ? (
     ""
@@ -98,7 +98,8 @@ export default function Account({
         provider={userProvider}
         ensProvider={mainnetProvider}
         price={price}
-        color={currentTheme === "light" ? "#1890ff" : "#2caad9"}
+        // color={currentTheme === "light" ? "#1890ff" : "#2caad9"}
+        color="#1890ff"
       />
     </span>
   );

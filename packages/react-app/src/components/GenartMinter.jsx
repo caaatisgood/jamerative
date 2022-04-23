@@ -25,7 +25,7 @@ async function mintNFT({contract, ownerAddress, provider, gasPrice, setStatus, i
 
   // scaffold-eth's Transactor helper gives us a nice UI popup when a transaction is sent
   const transactor = Transactor(provider, gasPrice);
-  const tx = await transactor(contract.mintToken(ownerAddress, metadataURI));
+  const tx = await transactor(contract.mint(ownerAddress, metadataURI));
 
   setStatus("Blockchain transaction sent, waiting confirmation...");
 
