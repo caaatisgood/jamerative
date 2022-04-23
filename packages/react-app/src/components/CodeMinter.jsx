@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { NFTStorage } from 'nft.storage';
-import { Card, Input, Upload, Button } from "antd";
+import styled from 'styled-components'
+import { Input, Upload, Button } from "antd";
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { useContractLoader } from "../hooks";
-import Account from "./Account";
 import { Transactor } from "../helpers";
-import { NFT_STORAGE_KEY, DEFAULT_CONTRACT_NAME } from "../constants";
+import { NFT_STORAGE_KEY } from "../constants";
 
 const _DEBUG_DEFAULT_CODE = "window.__fancyFunc=()=>console.log('fancy func');";
 const _DEBUG_DEFAULT_CODE_NAME = "__fancyFunc";
@@ -49,13 +49,10 @@ async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, 
 
 export default function CodeMinter({
   customContract,
-  account,
   gasPrice,
   signer,
   provider,
   name,
-  price,
-  blockExplorer,
 }) {
   const contracts = useContractLoader(signer);
   let contract;
@@ -64,8 +61,6 @@ export default function CodeMinter({
   } else {
     contract = customContract;
   }
-
-  const address = contract ? contract.address : "";
 
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
@@ -81,34 +76,6 @@ export default function CodeMinter({
     setPreviewURL(URL.createObjectURL(file));
     return false;
   }
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>
-        Choose image
-      </div>
-    </div>
-  );
-
-  const uploadView = (
-    <div>
-      Drop an image file or click below to select.
-      <Upload
-        name="avatar"
-        accept=".jpeg,.jpg,.png,.gif"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        beforeUpload={beforeUpload}
-      >
-        {uploadButton}
-      </Upload>
-    </div>
-  );
-
-  const preview = previewURL ? <img src={previewURL} style={{maxWidth: "800px"}}/> : <div/>
   const mintEnabled = file != null && !!nftName;
 
   const startMinting = () => {
@@ -133,41 +100,73 @@ export default function CodeMinter({
   }
 
   return (
-    <div style={{ margin: "auto", width: "70vw" }}>
-      <Card
-        title={
-          <div>
-            <h2 style={{ display: 'inline' }}>Code Minter</h2>
-            <div style={{ float: "right" }}>
-              <Account
-                address={address}
-                localProvider={provider}
-                injectedProvider={provider}
-                mainnetProvider={provider}
-                price={price}
-                blockExplorer={blockExplorer}
-              />
-              {account}
-            </div>
-          </div>
-        }
-        size="large"
-        style={{ marginTop: 25, width: "100%" }}
-        loading={false}
-      >
-        { file == null && uploadView }
-        {preview}
-        <Input placeholder="Enter a name for your code" onChange={e => {
-          setName(e.target.value);
-        }} value={nftName} />
-        <Input.TextArea placeholder="Enter your code here" onChange={e => {
-          setCode(e.target.value);
-        }} value={code} />
-        <Button type="primary" disabled={!mintEnabled} onClick={startMinting}>
-          {minting ? <LoadingOutlined/> : "Mint!"}
-        </Button>
-        {status}
-      </Card>
+    <div style={{ margin: "auto", maxWidth: "1024px", width: "100%", textAlign: "left" }}>
+      <h2 style={{ fontSize: 72, margin: 0 }}>
+        Mint Your Secret Sauce🥫
+      </h2>
+      <p style={{ fontSize: 24 }}>{">"} Mint your sharable code to let others to "jamerate" along!</p>
+      <br />
+      <div style={{ display: 'flex' }}>
+        <StyledUploadWrapper>
+          {file === null && (
+            <Upload
+              name="avatar"
+              accept=".jpeg,.jpg,.png,.gif"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              beforeUpload={beforeUpload}
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>
+                  Choose image
+                </div>
+              </div>
+            </Upload>
+          )}
+          {previewURL ? <img src={previewURL} style={{maxWidth: "800px"}}/> : <div/>}
+        </StyledUploadWrapper>
+        <div style={{ flex: 1 }}>
+          <label>
+            <span>
+              Name of your Secret Sauce:
+            </span>
+            <br />
+            <Input style={{ width: '40%' }} placeholder="Enter a name for your code" onChange={e => {
+              setName(e.target.value);
+            }} value={nftName} />
+          </label>
+          <br />
+          <br />
+          <label>
+            <span>
+              The Secret Sauce:
+            </span>
+            <Input.TextArea rows={6} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} placeholder="Enter your code here" onChange={e => {
+              setCode(e.target.value);
+            }} value={code} />
+          </label>
+          <Button type="primary" disabled={!mintEnabled} onClick={startMinting}>
+            {minting ? <LoadingOutlined/> : "Mint!"}
+          </Button>
+        </div>
+      </div>
+      {status}
     </div>
   );
 }
+
+const StyledUploadWrapper = styled.div`
+  width: 30%;
+  height: 183px;
+  margin-right: 20px;
+  .avatar-uploader {
+    height: 100%;
+  }
+  .ant-upload-select-picture-card {
+    width: 100%;
+    height: inherit;
+  }
+`

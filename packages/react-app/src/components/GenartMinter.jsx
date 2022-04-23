@@ -5,7 +5,7 @@ import { NFTStorage } from 'nft.storage';
 import { useContractLoader } from "../hooks";
 import Account from "./Account";
 import { Transactor } from "../helpers";
-import { NFT_STORAGE_KEY, DEFAULT_CONTRACT_NAME } from "../constants";
+import { NFT_STORAGE_KEY } from "../constants";
 
 async function mintNFT({contract, ownerAddress, provider, gasPrice, setStatus, image, name, description}) {
 
@@ -45,13 +45,10 @@ async function mintNFT({contract, ownerAddress, provider, gasPrice, setStatus, i
 
 export default function GenartMinter({
   customContract,
-  account,
   gasPrice,
   signer,
   provider,
   name,
-  price,
-  blockExplorer,
 }) {
   const contracts = useContractLoader(signer);
   let contract;
@@ -60,8 +57,6 @@ export default function GenartMinter({
   } else {
     contract = customContract;
   }
-
-  const address = contract ? contract.address : "";
 
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
@@ -150,21 +145,6 @@ export default function GenartMinter({
   const minterForm = (
     <div style={{ margin: "auto", width: "70vw" }}>
       <Card
-        title={
-          <div>
-            <div style={{ float: "right" }}>
-              <Account
-                address={address}
-                localProvider={provider}
-                injectedProvider={provider}
-                mainnetProvider={provider}
-                price={price}
-                blockExplorer={blockExplorer}
-              />
-              {account}
-            </div>
-          </div>
-        }
         size="large"
         style={{ marginTop: 25, width: "100%" }}
         loading={false}

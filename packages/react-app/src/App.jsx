@@ -282,13 +282,13 @@ function App(props) {
               address={address}
               blockExplorer={blockExplorer}
             />
-            {/* <GenartMinter
-              name="GenartNFTMinter"
+            <GenartMinter
+              name={DEFAULT_CONTRACT_NAME}
               signer={userProvider.getSigner()}
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
-            /> */}
+            />
           </Route>
 
           <Route path="/view">
