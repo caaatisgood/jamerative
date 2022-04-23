@@ -104,7 +104,7 @@ export default function CodeMinter({
       <h2 style={{ fontSize: 72, margin: 0 }}>
         Mint Your Secret Sauce🥫
       </h2>
-      <p style={{ fontSize: 24 }}>{">"} Mint your sharable code to let others to "jamerate" along!</p>
+      <p style={{ fontSize: 24, color: "#555" }}>{">"} Mint your sharable code to let others to "jamerate" along!</p>
       <br />
       <div style={{ display: 'flex' }}>
         <StyledUploadWrapper>
@@ -129,7 +129,7 @@ export default function CodeMinter({
           {previewURL ? <StyledPreviewImage src={previewURL} /> : <div/>}
         </StyledUploadWrapper>
         <div style={{ flex: 1 }}>
-          <label>
+          <StyledLabelText>
             <span>
               Name of your Secret Sauce:
             </span>
@@ -137,41 +137,46 @@ export default function CodeMinter({
             <StyledInput placeholder="Enter a name for your code" onChange={e => {
               setName(e.target.value);
             }} value={nftName} />
-          </label>
+          </StyledLabelText>
           <br />
           <br />
-          <label>
+          <StyledLabelText>
             <span>The Secret Sauce:</span>
-            <StyledTextarea rows={6} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} placeholder="Enter your code here" onChange={e => {
+            <StyledTextarea rows={5} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} placeholder="Enter your code here" onChange={e => {
               setCode(e.target.value);
             }} value={code} />
-          </label>
+          </StyledLabelText>
           <br />
           <br />
           <StyledButton type="primary" disabled={!mintEnabled} onClick={startMinting}>
             {minting ? <LoadingOutlined/> : "Mint!"}
-          </StyledButton>
+          </StyledButton>{" "}
+          <small>
+            {status}
+          </small>
         </div>
       </div>
-      {status}
     </div>
   );
 }
 
+const StyledLabelText = styled.span` 
+  font-size: 18px;
+`
 const inputStyle = css`
   padding: 10px 12px;
   border-radius: 8px;
 `
 const StyledInput = styled(Input)`
   ${inputStyle};
-  width: 40%;
+  width: 50%;
 `
 const StyledTextarea = styled(Input.TextArea)`
   ${inputStyle};
 `
 const uploaderStyle = css`
   width: 35%;
-  height: 335px;
+  height: 329px;
 `
 const StyledPreviewImage = styled.img`
   width: 100%;
