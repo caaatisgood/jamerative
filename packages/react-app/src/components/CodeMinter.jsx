@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NFTStorage } from 'nft.storage';
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Input, Upload, Button } from "antd";
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { useContractLoader } from "../hooks";
@@ -126,7 +126,7 @@ export default function CodeMinter({
               </div>
             </Upload>
           )}
-          {previewURL ? <img src={previewURL} style={{maxWidth: "800px"}}/> : <div/>}
+          {previewURL ? <StyledPreviewImage src={previewURL} /> : <div/>}
         </StyledUploadWrapper>
         <div style={{ flex: 1 }}>
           <label>
@@ -134,23 +134,23 @@ export default function CodeMinter({
               Name of your Secret Sauce:
             </span>
             <br />
-            <Input style={{ width: '40%' }} placeholder="Enter a name for your code" onChange={e => {
+            <StyledInput placeholder="Enter a name for your code" onChange={e => {
               setName(e.target.value);
             }} value={nftName} />
           </label>
           <br />
           <br />
           <label>
-            <span>
-              The Secret Sauce:
-            </span>
-            <Input.TextArea rows={6} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} placeholder="Enter your code here" onChange={e => {
+            <span>The Secret Sauce:</span>
+            <StyledTextarea rows={6} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} placeholder="Enter your code here" onChange={e => {
               setCode(e.target.value);
             }} value={code} />
           </label>
-          <Button type="primary" disabled={!mintEnabled} onClick={startMinting}>
+          <br />
+          <br />
+          <StyledButton type="primary" disabled={!mintEnabled} onClick={startMinting}>
             {minting ? <LoadingOutlined/> : "Mint!"}
-          </Button>
+          </StyledButton>
         </div>
       </div>
       {status}
@@ -158,9 +158,28 @@ export default function CodeMinter({
   );
 }
 
+const inputStyle = css`
+  padding: 10px 12px;
+  border-radius: 8px;
+`
+const StyledInput = styled(Input)`
+  ${inputStyle};
+  width: 40%;
+`
+const StyledTextarea = styled(Input.TextArea)`
+  ${inputStyle};
+`
+const uploaderStyle = css`
+  width: 35%;
+  height: 335px;
+`
+const StyledPreviewImage = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+`
 const StyledUploadWrapper = styled.div`
-  width: 30%;
-  height: 183px;
+  ${uploaderStyle};
   margin-right: 20px;
   .avatar-uploader {
     height: 100%;
@@ -168,5 +187,19 @@ const StyledUploadWrapper = styled.div`
   .ant-upload-select-picture-card {
     width: 100%;
     height: inherit;
+  }
+`
+
+export const StyledButton = styled.button`
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: lightsalmon;
+  font-size: 20px;
+  color: white;
+  opacity: 0.9;
+  :hover {
+    opacity: 1;
   }
 `
