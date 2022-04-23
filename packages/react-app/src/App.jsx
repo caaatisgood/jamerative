@@ -9,7 +9,8 @@ import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
 import { Account, Contract, Faucet, GasGauge, Header, CodeMinter, NFTViewer, Ramp, ThemeSwitch } from "./components";
-import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
+import GenartMinter from "./components/GenartMinter";
+import { INFURA_ID, NETWORK, NETWORKS, DEFAULT_CONTRACT_NAME } from "./constants";
 import { Transactor } from "./helpers";
 import {
   useBalance,
@@ -261,14 +262,22 @@ function App(props) {
               }}
               to="/contract"
             >
-              NFTMinter Contract
+              CodeNFTMinter Contract
             </Link>
           </Menu.Item>
         </Menu>
 
         <Switch>
           <Route exact path="/">
-          <CodeMinter
+            <CodeMinter
+              name={DEFAULT_CONTRACT_NAME}
+              signer={userProvider.getSigner()}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+            />
+            <GenartMinter
+              name="GenartNFTMinter"
               signer={userProvider.getSigner()}
               provider={localProvider}
               address={address}
@@ -278,6 +287,7 @@ function App(props) {
 
           <Route path="/view">
               <NFTViewer
+                name={DEFAULT_CONTRACT_NAME}
                 provider={localProvider}
                 address={address}
                 blockExplorer={blockExplorer}
@@ -286,7 +296,7 @@ function App(props) {
 
           <Route exact path="/contract">
             <Contract
-              name="NFTMinter"
+              name="CodeNFTMinter"
               signer={userProvider.getSigner()}
               provider={localProvider}
               address={address}

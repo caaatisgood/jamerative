@@ -55,9 +55,6 @@ export default function GenartMinter({
 }) {
   const contracts = useContractLoader(signer);
   let contract;
-  if (!name) {
-    name = DEFAULT_CONTRACT_NAME;
-  }
   if (!customContract) {
     contract = contracts ? contracts[name] : "";
   } else {
@@ -155,7 +152,6 @@ export default function GenartMinter({
       <Card
         title={
           <div>
-            {name}
             <div style={{ float: "right" }}>
               <Account
                 address={address}

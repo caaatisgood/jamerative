@@ -1,11 +1,8 @@
-import { Card, Upload, Input, InputNumber, Space } from "antd";
+import { Card, InputNumber, Space } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import React, { useState } from "react";
 import { useContractLoader } from "../hooks";
 import Account from "./Account";
-import { useParams } from "react-router-dom";
-
-const DEFAULT_CONTRACT_NAME = "NFTMinter";
 
 // rewrite ipfs:// uris to dweb.link gateway URLs
 function makeGatewayURL(ipfsURI) {
@@ -63,9 +60,6 @@ export default function NFTViewer({
 }) {
   const contracts = useContractLoader(provider);
   let contract;
-  if (!name) {
-    name = DEFAULT_CONTRACT_NAME;
-  }
   if (!customContract) {
     contract = contracts ? contracts[name] : "";
   } else {

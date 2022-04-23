@@ -5,10 +5,9 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { useContractLoader } from "../hooks";
 import Account from "./Account";
 import { Transactor } from "../helpers";
-import { NFT_STORAGE_KEY, CODE_NFT_IMAGE_CID, DEFAULT_CONTRACT_NAME } from "../constants";
+import { NFT_STORAGE_KEY, DEFAULT_CONTRACT_NAME } from "../constants";
 
 async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, image, name, code }) {
-  const metadataURI = CODE_NFT_IMAGE_CID;
   const client = new NFTStorage({ token: NFT_STORAGE_KEY });
   setStatus("Uploading to nft.storage...");
   const metadata = await client.store({
@@ -19,6 +18,10 @@ async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, 
     },
   });
   setStatus(`Upload complete! Minting token with metadata URI: ${metadata.url}`);
+  // the returned metadata.url has the IPFS URI we want to add.
+  // our smart contract already prefixes URIs with "ipfs://", so we remove it before calling the `mintToken` function
+  const metadataURI = metadata.url.replace(/^ipfs:\/\//, "");
+
   // scaffold-eth's Transactor helper gives us a nice UI popup when a transaction is sent
   const transactor = Transactor(provider, gasPrice);
   const tx = await transactor(contract.mintToken(ownerAddress, metadataURI));
@@ -39,7 +42,7 @@ async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, 
   return tokenId;
 }
 
-export default function Minter({
+export default function CodeMinter({
   customContract,
   account,
   gasPrice,
@@ -51,9 +54,6 @@ export default function Minter({
 }) {
   const contracts = useContractLoader(signer);
   let contract;
-  if (!name) {
-    name = DEFAULT_CONTRACT_NAME;
-  }
   if (!customContract) {
     contract = contracts ? contracts[name] : "";
   } else {
@@ -151,7 +151,6 @@ export default function Minter({
       <Card
         title={
           <div>
-            {name}
             <div style={{ float: "right" }}>
               <Account
                 address={address}

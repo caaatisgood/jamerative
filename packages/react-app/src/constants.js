@@ -1,21 +1,17 @@
-// https://bafkreieiqk4icqpc64qrecxs6tp6ivyvooh24etihge5pjx5tgx7j6cfru.ipfs.nftstorage.link/
-// default image for code NFT
-export const CODE_NFT_IMAGE_CID = "bafkreieiqk4icqpc64qrecxs6tp6ivyvooh24etihge5pjx5tgx7j6cfru"
-
 // API token for nft.storage. Please sign up and replace this with your own key from https://nft.storage/manage/
-export const NFT_STORAGE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQxMjY5RGIwQjdjNzA3Y0I0MjZCMjg2MUI1NTY2ZEEwZTZjQzVmOTAiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYyMjA2NTE1OTYxMCwibmFtZSI6Im5mdHNjaG9vbC10ZXN0In0.DSgQ5yot5Qyp4_OMg16h7hHOSRUQK7jkjiH7sM3DHOE";
+export const NFT_STORAGE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDI2Rjk4N0IyMjdmOUQwNzc4MzM1Q2MxNDE2Yzk1NmFkNTFhMzhmYTEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1MDcyMjM3MTY0MywibmFtZSI6ImV0aGFtcy1jb2xsYWItdGVzdCJ9.8YE9ozCWc9zPy4psp9ImB_RLUEMNivqjAtPeqqDO23M";
 
 // Infura project ID. If you're building a real app based on this, please replace with your own from https://infura.io/dashboard/ethereum
-export const INFURA_ID = "69f75bb89ba74822b512b464ef1495c9";
+export const INFURA_ID = "217edfc6be884c9abd40bd0d9c25ff01";
 
 // Key for Etherscan.io. If you're building a real app based on this, please replace with your own from https://etherscan.io/myapikey
-export const ETHERSCAN_KEY = "6EAGC2DEG6PP3M1GP1I86QJPQAUE4ESW1W";
+export const ETHERSCAN_KEY = "";
 
 // BLOCKNATIVE ID FOR Notify.js:
-export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
+export const BLOCKNATIVE_DAPPID = "89a5bf5b-a2f4-4629-95ee-1cf4914dc428";
 
 
-export const DEFAULT_CONTRACT_NAME = "NFTMinter";
+export const DEFAULT_CONTRACT_NAME = "CodeNFTMinter";
 
 export const NETWORK = chainId => {
   for (const n in NETWORKS) {
