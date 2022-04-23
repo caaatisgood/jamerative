@@ -1,15 +1,20 @@
 {
-  "name": "@collab/subgraph",
+  "name": "@scaffold-eth/subgraph",
+  "license": "UNLICENSED",
   "version": "1.0.0",
-  "dependencies": {
-    "@graphprotocol/graph-cli": "0.28.0",
-    "@graphprotocol/graph-ts": "0.26.0"
-  },
-  "license": "MIT",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/ $GRAPH_ACCESS_TOKEN",
+    "codegen": "graph codegen",
     "build": "graph build",
-    "codegen": "graph codegen --output-dir src/types/",
-    "deploy": "graph deploy paulrberg/create-eth-app --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ GITHUB_USERNAME/your-contract",
+    "create-local": "graph create --node http://localhost:8020/ scaffold-eth/your-contract",
+    "remove-local": "graph remove --node http://localhost:8020/ scaffold-eth/your-contract",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scaffold-eth/your-contract"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.18.0",
+    "@graphprotocol/graph-ts": "0.18.0"
+  },
+  "devDependencies": {
+    "mustache": "^3.1.0"
   }
 }
