@@ -150,13 +150,6 @@ function App(props) {
     writeContracts,
   ]);
 
-  useEffect(() => {
-    const ASSET_CONTRACT_ADDRESS = '0xDA0Dab7cB2aaE6b28BF888f87904888262159c9d'
-    fetch(`https://testnets-api.opensea.io/api/v1/assets?offset=0&limit=20&asset_contract_address=${ASSET_CONTRACT_ADDRESS}`)
-      .then(res => res.json())
-      .then(console.log)
-  }, [])
-
   let networkDisplay = "";
   if (localChainId && selectedChainId && localChainId !== selectedChainId) {
     const networkSelected = NETWORK(selectedChainId);

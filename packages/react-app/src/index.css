@@ -6,4 +6,7 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  background: lightgrey;
+  padding: 2px 4px;
+  border-radius: 4px;
 }

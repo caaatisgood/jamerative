@@ -7,8 +7,11 @@ import { useContractLoader } from "../hooks";
 import { Transactor } from "../helpers";
 import { NFT_STORAGE_KEY } from "../constants";
 
-const _DEBUG_DEFAULT_CODE = "window.__fancyFunc=()=>console.log('fancy func');";
-const _DEBUG_DEFAULT_CODE_NAME = "__fancyFunc";
+const _DEBUG_DEFAULT_CODE = "";
+const _DEBUG_DEFAULT_CODE_NAME = "";
+
+// const _DEBUG_DEFAULT_CODE = "window.__fancyFunc=()=>console.log('fancy func');";
+// const _DEBUG_DEFAULT_CODE_NAME = "__fancyFunc";
 
 async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, image, name, code }) {
   const client = new NFTStorage({ token: NFT_STORAGE_KEY });
@@ -130,7 +133,7 @@ export default function CodeMinter({
           {previewURL ? <StyledPreviewImage src={previewURL} /> : <div/>}
         </StyledUploadWrapper>
         <div style={{ flex: 1 }}>
-          <StyledLabelText>
+          <StyledLabel>
             <span>
               Name of your Secret Sauce:
             </span>
@@ -138,15 +141,15 @@ export default function CodeMinter({
             <StyledInput onChange={e => {
               setName(e.target.value);
             }} value={nftName} />
-          </StyledLabelText>
+          </StyledLabel>
           <br />
           <br />
-          <StyledLabelText>
+          <StyledLabel>
             <span>The Secret Sauce:</span>
             <StyledTextarea rows={5} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} onChange={e => {
               setCode(e.target.value);
             }} value={code} />
-          </StyledLabelText>
+          </StyledLabel>
           <br />
           <br />
           <StyledButton type="primary" disabled={!mintEnabled} onClick={startMinting}>
@@ -161,7 +164,7 @@ export default function CodeMinter({
   );
 }
 
-export const StyledLabelText = styled.span` 
+export const StyledLabel = styled.label` 
   font-size: 18px;
 `
 const inputStyle = css`

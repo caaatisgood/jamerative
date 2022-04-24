@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Fragment } from "react";
 import styled from 'styled-components'
 // import { Upload } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
@@ -6,7 +6,19 @@ import { create as ipfsCreate } from 'ipfs-http-client'
 import { useContractLoader } from "../hooks";
 import { Transactor } from "../helpers";
 import { NFT_STORAGE_KEY } from "../constants";
-import { StyledLabelText, StyledInput, StyledButton } from './CodeMinter'
+import { StyledLabel, StyledInput, StyledButton } from './CodeMinter'
+
+const CODE_NFT_CONTRACT_ADDR = "0xDA0Dab7cB2aaE6b28BF888f87904888262159c9d"
+
+const getReadableHash = (address) => {
+  let displayAddress = address.substr(0, 6);
+  if (address.indexOf("0x") < 0) {
+    displayAddress = address;
+  } else {
+    displayAddress += "..." + address.substr(-4);
+  }
+  return displayAddress
+}
 
 async function mintNFT({contract, ownerAddress, provider, gasPrice, setStatus, files, name }) {
   let ipfs = ipfsCreate();
@@ -61,10 +73,22 @@ export default function GenartMinter({
 
   const [files, setFiles] = useState(undefined);
   const [nftName, setName] = useState("");
+  const [codeNft, setCodeNft] = useState("");
+  const [codeNfts, setCodeNfts] = useState(undefined)
   const [minting, setMinting] = useState(false);
   const [status, setStatus] = useState("");
   const [tokenId, setTokenId] = useState(null);
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    fetch(`https://testnets-api.opensea.io/api/v1/assets?offset=0&limit=20&asset_contract_address=${CODE_NFT_CONTRACT_ADDR}`)
+      .then(res => res.json())
+      .then(({ assets }) => {
+        setCodeNfts(
+          assets.filter(asset => asset.description === "CodeNFT" || asset.traits.some(trait => trait.trait_type === "Sauce"))
+        )
+      })
+  }, [])
 
   const onFileChange = (evt) => {
     let files = Array.from(fileInputRef.current.files).filter((file) => !file.name.startsWith("."))
@@ -79,8 +103,13 @@ export default function GenartMinter({
   const jamSourceCodeWithSauce = (indexHtmlFile) => {
     const reader = new FileReader()
     reader.onload = (file) => {
-      console.log(file)
-      console.log("reader.result", reader.result)
+      let indexHtmlStr = reader.result
+      let headStartTag = "<head"
+      let headStartTagIdx = indexHtmlStr.indexOf(headStartTag)
+      let strFromHeadTag = indexHtmlStr.substring(headStartTagIdx)
+      let headBodyStartIdx = headStartTagIdx + strFromHeadTag.indexOf(">") + 1
+
+      // let startOfHeadIndex = indexHtml.indexOf(headStartTag)
     }
     reader.readAsText(indexHtmlFile)
     return indexHtmlFile
@@ -107,8 +136,6 @@ export default function GenartMinter({
       })
     });
   }
-
-  console.log({ files })
   
   return (
     <div style={{ margin: "auto", maxWidth: "1024px", width: "100%", textAlign: "left" }}>
@@ -144,7 +171,7 @@ export default function GenartMinter({
           )}
         </StyledUploadWrapper>
         <div style={{ flex: 1 }}>
-          <StyledLabelText>
+          <StyledLabel>
             <span>
               Name of your Jamerative Art:
             </span>
@@ -152,7 +179,26 @@ export default function GenartMinter({
             <StyledInput onChange={e => {
               setName(e.target.value);
             }} value={nftName} />
-          </StyledLabelText>
+          </StyledLabel>
+          <br />
+          <br />
+          {codeNfts && (
+            <>
+              {codeNfts?.map(token => {
+                
+                return (
+                  <StyledLabel style={{ display: 'flex', alignItems: "center" }}>
+                    <StyledInput style={{ width: 'fit-content', marginRight: 8 }} type="radio" name="sauce" onChange={() => {
+                      setCodeNft(token);
+                    }} />
+                    <span style={{ flex: 1 }}>
+                      #{token.token_id} <code>{getReadableHash(token.asset_contract.address)}</code>, by <code>{getReadableHash(token.creator.address)}</code>
+                    </span>
+                  </StyledLabel>
+                )
+              })}
+            </>
+          )}
           <br />
           <br />
           <StyledButton type="primary" disabled={!mintEnabled} onClick={startMinting}>
