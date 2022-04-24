@@ -78,6 +78,7 @@ export default function GenartMinter({
   const [minting, setMinting] = useState(false);
   const [status, setStatus] = useState("");
   const [tokenId, setTokenId] = useState(null);
+  const [jammedFiles, setJammedFiles] = useState(undefined)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -85,7 +86,7 @@ export default function GenartMinter({
       .then(res => res.json())
       .then(({ assets }) => {
         setCodeNfts(
-          assets.filter(asset => asset.description === "CodeNFT" || asset.traits.some(trait => trait.trait_type === "Sauce"))
+          assets.filter(asset => asset.description === "CodeNFT" || asset.traits.some(trait => trait.trait_type === "Sauce")).sort((a, b) => b.tokenId > a.tokenId)
         )
       })
   }, [])
@@ -105,6 +106,8 @@ export default function GenartMinter({
     setFiles(files)
     jamSourceCodeWithSauce(files)
   }
+
+  console.log({ files })
 
   const jamSourceCodeWithSauce = (_files = files, _codeNft = codeNft) => {
     if (!_codeNft?.traits) {
@@ -127,7 +130,6 @@ export default function GenartMinter({
       // let startOfHeadIndex = indexHtml.indexOf(headStartTag)
     }
     reader.readAsText(indexHtmlFile)
-    return indexHtmlFile
   }
 
   const mintEnabled = (files?.length > 0) && !!nftName;
@@ -203,7 +205,7 @@ export default function GenartMinter({
             <>
               {codeNfts?.map(token => {
                 return (
-                  <StyledLabel style={{ display: 'flex', alignItems: "center" }}>
+                  <StyledLabel key={token.token_id} style={{ display: 'flex', alignItems: "center" }}>
                     <StyledInput
                       style={{ width: 'fit-content', marginRight: 8 }}
                       type="radio"
