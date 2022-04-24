@@ -90,17 +90,28 @@ export default function GenartMinter({
       })
   }, [])
 
-  const onFileChange = (evt) => {
-    let files = Array.from(fileInputRef.current.files).filter((file) => !file.name.startsWith("."))
-
-    let indexHtmlFile = files.find(file => file.name === 'index.html')
-    jamSourceCodeWithSauce(indexHtmlFile)
-    // let jammedIndexHtmlFile = jamSourceCodeWithSauce(indexHtmlFile)
-
-    setFiles(files)
+  const onChangeCodeNftSelection = (token) => (evt) => {
+    if (!evt.target.checked) {
+      return
+    }
+    setCodeNft(token);
+    if (files) {
+      jamSourceCodeWithSauce(undefined, token)
+    }
   }
 
-  const jamSourceCodeWithSauce = (indexHtmlFile) => {
+  const onFileChange = (evt) => {
+    let files = Array.from(fileInputRef.current.files).filter((file) => !file.name.startsWith("."))
+    setFiles(files)
+    jamSourceCodeWithSauce(files)
+  }
+
+  const jamSourceCodeWithSauce = (_files = files, _codeNft = codeNft) => {
+    if (!_codeNft?.traits) {
+      return
+    }
+    let sauce = _codeNft.traits.find(trait => trait.trait_type === "code")?.value || ""
+    let indexHtmlFile = _files.find(file => file.name === 'index.html')
     const reader = new FileReader()
     reader.onload = (file) => {
       let indexHtmlStr = reader.result
@@ -108,7 +119,11 @@ export default function GenartMinter({
       let headStartTagIdx = indexHtmlStr.indexOf(headStartTag)
       let strFromHeadTag = indexHtmlStr.substring(headStartTagIdx)
       let headBodyStartIdx = headStartTagIdx + strFromHeadTag.indexOf(">") + 1
-
+      let jammedIndexHtml =
+        indexHtmlStr.substring(headBodyStartIdx, 0) +
+        `<script>${sauce}</script>` +
+        indexHtmlStr.substring(headBodyStartIdx)
+      console.log(jammedIndexHtml)
       // let startOfHeadIndex = indexHtml.indexOf(headStartTag)
     }
     reader.readAsText(indexHtmlFile)
@@ -136,6 +151,8 @@ export default function GenartMinter({
       })
     });
   }
+
+  console.log({ codeNfts })
   
   return (
     <div style={{ margin: "auto", maxWidth: "1024px", width: "100%", textAlign: "left" }}>
@@ -185,12 +202,14 @@ export default function GenartMinter({
           {codeNfts && (
             <>
               {codeNfts?.map(token => {
-                
                 return (
                   <StyledLabel style={{ display: 'flex', alignItems: "center" }}>
-                    <StyledInput style={{ width: 'fit-content', marginRight: 8 }} type="radio" name="sauce" onChange={() => {
-                      setCodeNft(token);
-                    }} />
+                    <StyledInput
+                      style={{ width: 'fit-content', marginRight: 8 }}
+                      type="radio"
+                      name="sauce"
+                      onChange={onChangeCodeNftSelection(token)}
+                    />
                     <span style={{ flex: 1 }}>
                       #{token.token_id} <code>{getReadableHash(token.asset_contract.address)}</code>, by <code>{getReadableHash(token.creator.address)}</code>
                     </span>
