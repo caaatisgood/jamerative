@@ -11,7 +11,7 @@ export default function Banner() {
       <br />
       <h1>🍯 Jamerative</h1>
       <p style={{ fontSize: 32 }}>
-        A platform for sharing generative art code with other generative artists,<br />
+        A platform for sharing generative art code with others,<br />
         and earn more by doing so, lived on the blockchain.
       </p>
       <br />
