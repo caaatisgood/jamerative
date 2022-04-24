@@ -292,6 +292,9 @@ function App(props) {
               address={address}
               blockExplorer={blockExplorer}
             />
+            <br />
+            <br />
+            <br />
           </Route>
 
           <Route path="/view">

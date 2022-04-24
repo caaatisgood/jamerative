@@ -207,4 +207,8 @@ export const StyledButton = styled.button`
   :hover {
     opacity: 1;
   }
+  :disabled {
+    cursor: not-allowed;
+    background: LightGray;
+  }
 `
