@@ -22,8 +22,10 @@ const getReadableHash = (address) => {
 
 async function mintNFT({contract, ownerAddress, provider, gasPrice, setStatus, files, name }) {
   let ipfs = ipfsCreate();
-  ipfs.add(files)
   setStatus("Uploading to ipfs...")
+  let result = await ipfs.addAll(files)
+
+  console.log("result", result)
   // const metadata = await client.store({
   //   name,
   //   description: "",
@@ -107,8 +109,6 @@ export default function GenartMinter({
     jamSourceCodeWithSauce(files)
   }
 
-  console.log({ files })
-
   const jamSourceCodeWithSauce = (_files = files, _codeNft = codeNft) => {
     if (!_codeNft?.traits) {
       return
@@ -126,7 +126,10 @@ export default function GenartMinter({
         indexHtmlStr.substring(headBodyStartIdx, 0) +
         `<script>${sauce}</script>` +
         indexHtmlStr.substring(headBodyStartIdx)
-      console.log(jammedIndexHtml)
+
+      let restFiles = _files.filter(file => file.name !== 'index.html')
+      let jammedIndexHtmlBlob = new Blob([jammedIndexHtml], { type: "text/html" })
+      setJammedFiles([...restFiles, jammedIndexHtmlBlob])
       // let startOfHeadIndex = indexHtml.indexOf(headStartTag)
     }
     reader.readAsText(indexHtmlFile)
@@ -145,7 +148,7 @@ export default function GenartMinter({
         gasPrice, 
         setStatus,
         name: nftName, 
-        files,
+        files: jammedFiles,
       }).then(newTokenId => {
         setMinting(false);
         console.log('minting complete');
@@ -154,7 +157,7 @@ export default function GenartMinter({
     });
   }
 
-  console.log({ codeNfts })
+  console.log({ codeNfts, files, jammedFiles })
   
   return (
     <div style={{ margin: "auto", maxWidth: "1024px", width: "100%", textAlign: "left" }}>

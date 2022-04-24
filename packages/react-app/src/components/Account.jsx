@@ -62,7 +62,7 @@ export default function Account({
           size="large"
           onClick={logoutOfWeb3Modal}
         >
-          logout
+          disconnect
         </Button>,
       );
     } else {

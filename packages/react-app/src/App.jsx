@@ -238,7 +238,7 @@ function App(props) {
       <Header />
       {networkDisplay}
       <BrowserRouter>
-        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+        {/* <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
         <Menu.Item key="/">
             <Link
               onClick={() => {
@@ -264,10 +264,12 @@ function App(props) {
               CodeNFTMinter Contract
             </Link>
           </Menu.Item>
-        </Menu>
+        </Menu> */}
 
         <Switch>
           <Route exact path="/">
+            <br />
+            <br />
             <CodeMinter
               name={DEFAULT_CONTRACT_NAME}
               signer={userProvider.getSigner()}
