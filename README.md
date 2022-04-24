@@ -1,4 +1,6 @@
-# 🎟 nft-e2e-example
+# 🍯 Jamerative
+
+This project is based on https://github.com/ipfs-shipyard/nft-school-examples
 
 > An end-to-end example of minting NFTs on Ethereum from your browser. Powered by nft.storage and scaffold-eth!
 
