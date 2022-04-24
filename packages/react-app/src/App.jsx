@@ -9,6 +9,7 @@ import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
 import { Account, Contract, Faucet, GasGauge, Header, CodeMinter, NFTViewer, Ramp, ThemeSwitch } from "./components";
+import Banner from './components/Banner'
 import GenartMinter from "./components/GenartMinter";
 import { INFURA_ID, NETWORK, NETWORKS, DEFAULT_CONTRACT_NAME } from "./constants";
 import { Transactor } from "./helpers";
@@ -268,6 +269,7 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
+            <Banner />
             <br />
             <br />
             <CodeMinter

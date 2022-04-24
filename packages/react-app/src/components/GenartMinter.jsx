@@ -85,10 +85,11 @@ export default function GenartMinter({
 
   useEffect(() => {
     fetch(`https://testnets-api.opensea.io/api/v1/assets?offset=0&limit=20&asset_contract_address=${CODE_NFT_CONTRACT_ADDR}`)
+    // fetch(`https://testnets-api.opensea.io/api/v1/assets?offset=0&limit=20&owner=0xa2E487CadD1262056DDfF55335fE864a03178f16`)
       .then(res => res.json())
       .then(({ assets }) => {
         setCodeNfts(
-          assets.filter(asset => asset.description === "CodeNFT" || asset.traits.some(trait => trait.trait_type === "Sauce")).sort((a, b) => b.tokenId > a.tokenId)
+          assets.filter(asset => asset.description === "CodeNFT" || asset.traits.some(trait => trait.trait_type === "type" && trait.value === "Sauce")).sort((a, b) => b.tokenId > a.tokenId)
         )
       })
   }, [])
@@ -118,19 +119,17 @@ export default function GenartMinter({
     const reader = new FileReader()
     reader.onload = (file) => {
       let indexHtmlStr = reader.result
-      let headStartTag = "<head"
-      let headStartTagIdx = indexHtmlStr.indexOf(headStartTag)
-      let strFromHeadTag = indexHtmlStr.substring(headStartTagIdx)
-      let headBodyStartIdx = headStartTagIdx + strFromHeadTag.indexOf(">") + 1
+      let headEndTag = "</head>"
+      let headEndTagIdx = indexHtmlStr.indexOf(headEndTag)
       let jammedIndexHtml =
-        indexHtmlStr.substring(headBodyStartIdx, 0) +
+        indexHtmlStr.substring(headEndTagIdx, 0) +
         `<script>${sauce}</script>` +
-        indexHtmlStr.substring(headBodyStartIdx)
+        indexHtmlStr.substring(headEndTagIdx)
 
       let restFiles = _files.filter(file => file.name !== 'index.html')
+      console.log("jammedIndexHtml", jammedIndexHtml)
       let jammedIndexHtmlBlob = new Blob([jammedIndexHtml], { type: "text/html" })
       setJammedFiles([...restFiles, jammedIndexHtmlBlob])
-      // let startOfHeadIndex = indexHtml.indexOf(headStartTag)
     }
     reader.readAsText(indexHtmlFile)
   }
