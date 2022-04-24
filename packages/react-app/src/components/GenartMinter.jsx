@@ -1,11 +1,11 @@
-import { Card, Upload, Input, Button, Col } from "antd";
+import React, { useState, useRef } from "react";
+import { Upload } from "antd";
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import React, { useState } from "react";
 import { NFTStorage } from 'nft.storage';
 import { useContractLoader } from "../hooks";
-import Account from "./Account";
 import { Transactor } from "../helpers";
 import { NFT_STORAGE_KEY } from "../constants";
+import { StyledLabelText, StyledInput, StyledButton } from './CodeMinter'
 
 async function mintNFT({contract, ownerAddress, provider, gasPrice, setStatus, image, name, description}) {
 
@@ -59,59 +59,24 @@ export default function GenartMinter({
   }
 
   const [file, setFile] = useState(null);
-  const [previewURL, setPreviewURL] = useState(null);
   const [nftName, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [minting, setMinting] = useState(false);
   const [status, setStatus] = useState("");
   const [tokenId, setTokenId] = useState(null);
+  const fileInputRef = useRef(null)
 
-  const beforeUpload = (file, fileList) => {
-    console.log(file, fileList);
-    setFile(file);
-    setPreviewURL(URL.createObjectURL(file));
-    return false;
+  // const beforeUpload = (file, fileList) => {
+  //   console.log(file, fileList);
+  //   setFile(file);
+  //   setPreviewURL(URL.createObjectURL(file));
+  //   return false;
+  // }
+
+  const onFileChange = (evt) => {
+    // console.log(evt)
+    console.log(fileInputRef.files)
+    console.log('> fileInputRef', fileInputRef.current.files)
   }
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>
-        Choose image
-      </div>
-    </div>
-  );
-
-  const uploadView = (
-    <div>
-      Drop an image file or click below to select.
-      <Upload
-        name="avatar"
-        accept=".jpeg,.jpg,.png,.gif"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        beforeUpload={beforeUpload}
-      >
-        {uploadButton}
-      </Upload>
-    </div>
-  );
-
-  const preview = previewURL ? <img src={previewURL} style={{maxWidth: "800px"}}/> : <div/>
-
-  const nameField = (
-    <Input placeholder="Enter a name for your NFT" onChange={e => {
-      setName(e.target.value);
-    }}/>
-  );
-
-  const descriptionField = (
-    <Input.TextArea placeholder="Enter a description" onChange={e => {
-      setDescription(e.target.value);
-    }}/>
-  );
 
   const mintEnabled = file != null && !!nftName;
 
@@ -127,7 +92,6 @@ export default function GenartMinter({
         setStatus,
         name: nftName, 
         image: file, 
-        description 
       }).then(newTokenId => {
         setMinting(false);
         console.log('minting complete');
@@ -136,29 +100,42 @@ export default function GenartMinter({
     });
   }
   
-  const mintButton = (
-    <Button type="primary" disabled={!mintEnabled} onClick={startMinting}>
-      {minting ? <LoadingOutlined/> : "Mint!"}
-    </Button>
-  )
-  
-  const minterForm = (
-    <div style={{ margin: "auto", width: "70vw" }}>
-      <Card
-        size="large"
-        style={{ marginTop: 25, width: "100%" }}
-        loading={false}
-      >
-        { file == null && uploadView }
-        {preview}
-        {nameField}
-        {descriptionField}
-        {mintButton}
+  return (
+    <div style={{ margin: "auto", maxWidth: "1024px", width: "100%", textAlign: "left" }}>
+      <h2 style={{ fontSize: 72, margin: 0 }}>
+        Mint Your Jamerative Art🍻
+      </h2>
+      <p style={{ fontSize: 24, color: "#555" }}>{">"} Jam your generative art project with "the secret sauce"!</p>
+      <div>
+        {file === null && (
+          <input
+            ref={fileInputRef}
+            type="file"
+            webkitdirectory="true"
+            mozdirectory="true"
+            onChange={onFileChange}
+            title="Choose directory"
+          />
+        )}
+        <br />
+        <br />
+        <StyledLabelText>
+          <span>
+            Name of your Jamerative Art:
+          </span>
+          <br />
+          <StyledInput onChange={e => {
+            setName(e.target.value);
+          }} value={nftName} />
+        </StyledLabelText>
+      </div>
+      <br />
+      <StyledButton type="primary" disabled={!mintEnabled} onClick={startMinting}>
+        {minting ? <LoadingOutlined/> : "Mint!"}
+      </StyledButton>{" "}
+      <small>
         {status}
-      </Card>
+      </small>
     </div>
   );
-
-
-  return minterForm;
 }

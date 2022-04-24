@@ -282,6 +282,9 @@ function App(props) {
               address={address}
               blockExplorer={blockExplorer}
             />
+            <br />
+            <br />
+            <br />
             <GenartMinter
               name={DEFAULT_CONTRACT_NAME}
               signer={userProvider.getSigner()}
@@ -292,12 +295,12 @@ function App(props) {
           </Route>
 
           <Route path="/view">
-              <NFTViewer
-                name={DEFAULT_CONTRACT_NAME}
-                provider={localProvider}
-                address={address}
-                blockExplorer={blockExplorer}
-              />
+            <NFTViewer
+              name={DEFAULT_CONTRACT_NAME}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+            />
           </Route>
 
           <Route exact path="/contract">

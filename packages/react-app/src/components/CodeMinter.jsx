@@ -18,7 +18,7 @@ async function mintNFT({ contract, ownerAddress, provider, gasPrice, setStatus, 
     description: "",
     image,
     properties: {
-      type: "CodeNFT",
+      type: "Sauce",
       code,
     },
   });
@@ -104,7 +104,8 @@ export default function CodeMinter({
       <h2 style={{ fontSize: 72, margin: 0 }}>
         Mint Your Secret Sauce🥫
       </h2>
-      <p style={{ fontSize: 24, color: "#555" }}>{">"} Mint your sharable code to let others to "jamerate" along!</p>
+      <p style={{ fontSize: 20, color: "#555", marginBottom: 0 }}>{">"} Mint your sharable code to let others to "jamerate" along!</p>
+      <p style={{ fontSize: 20, color: "#555" }}>{">"} You'll earn a fraction from the art works that include your code.</p>
       <br />
       <div style={{ display: 'flex' }}>
         <StyledUploadWrapper>
@@ -134,7 +135,7 @@ export default function CodeMinter({
               Name of your Secret Sauce:
             </span>
             <br />
-            <StyledInput placeholder="Enter a name for your code" onChange={e => {
+            <StyledInput onChange={e => {
               setName(e.target.value);
             }} value={nftName} />
           </StyledLabelText>
@@ -142,7 +143,7 @@ export default function CodeMinter({
           <br />
           <StyledLabelText>
             <span>The Secret Sauce:</span>
-            <StyledTextarea rows={5} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} placeholder="Enter your code here" onChange={e => {
+            <StyledTextarea rows={5} style={{ fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace" }} onChange={e => {
               setCode(e.target.value);
             }} value={code} />
           </StyledLabelText>
@@ -160,14 +161,14 @@ export default function CodeMinter({
   );
 }
 
-const StyledLabelText = styled.span` 
+export const StyledLabelText = styled.span` 
   font-size: 18px;
 `
 const inputStyle = css`
   padding: 10px 12px;
   border-radius: 8px;
 `
-const StyledInput = styled(Input)`
+export const StyledInput = styled(Input)`
   ${inputStyle};
   width: 50%;
 `
@@ -194,7 +195,6 @@ const StyledUploadWrapper = styled.div`
     height: inherit;
   }
 `
-
 export const StyledButton = styled.button`
   padding: 10px 24px;
   border-radius: 10px;
